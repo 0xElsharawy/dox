@@ -1,0 +1,33 @@
+#include "../include/token.h"
+
+const char *token_type_to_string(TokenType type) {
+  switch (type) {
+  case TOKEN_IDENTIFIER:
+    return "TOKEN_IDENTIFIER";
+  case TOKEN_NUMBER:
+    return "NUMBER";
+
+  case TOKEN_KW_INT:
+    return "TOKEN_KW_INT";
+  case TOKEN_KW_RETURN:
+    return "TOKEN_KW_RETURN";
+
+  case TOKEN_SEMICOLON:
+    return "TOKEN_SEMICOLON";
+
+  case TOKEN_LPAREN:
+    return "TOKEN_LPAREN";
+  case TOKEN_RPAREN:
+    return "TOKEN_RPAREN";
+  case TOKEN_LBRACE:
+    return "TOKEN_LBRACE";
+  case TOKEN_RBRACE:
+    return "TOKEN_RBRACE";
+
+  case TOKEN_EOF:
+    return "TOKEN_EOF";
+
+  default:
+    return "UNKNOWN_TOKEN";
+  }
+}
