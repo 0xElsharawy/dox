@@ -5,7 +5,7 @@ const char *token_type_to_string(TokenType type) {
   case TOKEN_IDENTIFIER:
     return "TOKEN_IDENTIFIER";
   case TOKEN_NUMBER:
-    return "NUMBER";
+    return "TOKEN_NUMBER";
 
   case TOKEN_KW_INT:
     return "TOKEN_KW_INT";
