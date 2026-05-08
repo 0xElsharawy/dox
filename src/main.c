@@ -1,4 +1,7 @@
+#include "../include/lexer.h"
+
 #include <stdio.h>
+#include <stdlib.h>
 
 int main(int argc, char *argv[]) {
   if (argc != 2) {
@@ -6,20 +9,38 @@ int main(int argc, char *argv[]) {
     return 1;
   }
 
-  const char *filename = argv[1];
-
-  FILE *file = fopen(filename, "r");
+  FILE *file = fopen(argv[1], "r");
   if (!file) {
     perror("fopen");
     return 1;
   }
 
-  char line[1024];
+  fseek(file, 0, SEEK_END);
+  long size = ftell(file);
+  rewind(file);
 
-  while (fgets(line, sizeof(line), file)) {
-    printf("%s", line);
-  }
+  char *source = malloc(size + 1);
+  fread(source, 1, size, file);
+  source[size] = '\0';
 
   fclose(file);
+
+  Lexer lexer;
+  lexer_init(&lexer, source);
+
+  Token token;
+
+  do {
+    token = lexer_next_token(&lexer);
+
+    printf("%s", token_type_to_string(token.type));
+    if (token.value)
+      printf(" : %s", token.value);
+
+    printf("\n");
+
+  } while (token.type != TOKEN_EOF);
+
+  free(source);
   return 0;
 }
