@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -Wall -Wextra -std=c11 -O2 -Iinclude
+CFLAGS = -Wall -Wextra -std=c11 -O2 -Iinclude -D_DEFAULT_SOURCE
 
 SRC_DIR = src
 BUILD_DIR = build
