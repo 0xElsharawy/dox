@@ -2,32 +2,32 @@ CC = gcc
 CFLAGS = -Wall -Wextra -std=c11 -O2 -Iinclude -D_DEFAULT_SOURCE
 
 SRC_DIR = src
-BUILD_DIR = build
 BIN_DIR = bin
-TEST_SCRIPT= tests/run_tests.sh
+TEST_SCRIPT = tests/run_tests.sh
 
 TARGET = $(BIN_DIR)/tinycc
 
+# Find all .c files in src/
 SRCS = $(wildcard $(SRC_DIR)/*.c)
 
-OBJS = $(patsubst $(SRC_DIR)/%.c, $(BUILD_DIR)/%.o, $(SRCS))
-
+# Default target
 all: $(TARGET)
 
-$(TARGET): $(OBJS) | $(BIN_DIR)
-	@$(CC) $(CFLAGS) $(OBJS) -o $(TARGET)
+# Compile all source files directly into the executable
+$(TARGET): $(SRCS) | $(BIN_DIR)
+	@$(CC) $(CFLAGS) $(SRCS) -o $(TARGET)
 
-$(BUILD_DIR)/%.o: $(SRC_DIR)/%.c | $(BUILD_DIR)
-	@$(CC) $(CFLAGS) -c $< -o $@
-
-$(BIN_DIR) $(BUILD_DIR):
+# Create bin directory if it doesn't exist
+$(BIN_DIR):
 	@mkdir -p $@
 
+# Run tests
 test: $(TARGET)
 	@chmod +x $(TEST_SCRIPT)
 	@./$(TEST_SCRIPT)
 
+# Clean only the bin directory
 clean:
-	@rm -rf $(BUILD_DIR) $(BIN_DIR)
+	@rm -rf $(BIN_DIR)
 
-.PHONY: all clean
+.PHONY: all clean test
