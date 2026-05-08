@@ -2,10 +2,19 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 int main(int argc, char *argv[]) {
   if (argc != 2) {
     fprintf(stderr, "Usage: %s <file>\n", argv[0]);
+    return 1;
+  }
+
+  size_t len = strlen(argv[1]);
+
+  if (len < 3 || strcmp(argv[1] + len - 2, ".c") != 0) {
+    fprintf(stderr, "Error: Input file '%s' must have a '.c' extension\n",
+            argv[1]);
     return 1;
   }
 
