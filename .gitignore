@@ -1,1 +1,5 @@
 bin/
+
+# Ignore the output of the build process
+out
+out.s
