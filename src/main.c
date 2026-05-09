@@ -1,8 +1,9 @@
-#include "../include/lexer.h"
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
+#include "../include/lexer.h"
+#include "../include/parser.h"
 
 int main(int argc, char *argv[]) {
   if (argc != 2) {
@@ -37,18 +38,17 @@ int main(int argc, char *argv[]) {
   Lexer lexer;
   lexer_init(&lexer, source);
 
-  Token token;
+  Token token, tokens[1024];
+  size_t token_count = 0;
 
   do {
     token = lexer_next_token(&lexer);
-
-    printf("%s", token_type_to_string(token.type));
-    if (token.value)
-      printf(" : %s", token.value);
-
-    printf("\n");
-
+    tokens[token_count++] = token;
   } while (token.type != TOKEN_EOF);
+
+  Parser parser;
+  parser_init(&parser, tokens, token_count);
+  ast_print(parser_parse(&parser), 0);
 
   free(source);
   return 0;
