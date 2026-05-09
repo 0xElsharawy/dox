@@ -4,13 +4,13 @@
 
 static void lexer_advance(Lexer *lexer) {
   lexer->i++;
-  lexer->c = lexer->input[lexer->i];
+  lexer->c = lexer->src[lexer->i];
 }
 
-void lexer_init(Lexer *lexer, const char *input) {
-  lexer->input = input;
+void lexer_init(Lexer *lexer, const char *src) {
+  lexer->src = src;
   lexer->i = 0;
-  lexer->c = input[0];
+  lexer->c = src[0];
 }
 
 Token lexer_next_token(Lexer *lexer) {
@@ -26,7 +26,7 @@ Token lexer_next_token(Lexer *lexer) {
     return token;
   }
 
-  if (strncmp(&lexer->input[lexer->i], "int", 3) == 0) {
+  if (strncmp(&lexer->src[lexer->i], "int", 3) == 0) {
     token.type = TOKEN_KW_INT;
     token.value = "int";
     for (int j = 0; j < 3; ++j) {
@@ -35,7 +35,7 @@ Token lexer_next_token(Lexer *lexer) {
     return token;
   }
 
-  if (strncmp(&lexer->input[lexer->i], "return", 6) == 0) {
+  if (strncmp(&lexer->src[lexer->i], "return", 6) == 0) {
     token.type = TOKEN_KW_RETURN;
     token.value = "return";
     for (int j = 0; j < 6; ++j) {
@@ -105,7 +105,7 @@ Token lexer_next_token(Lexer *lexer) {
     return token;
   }
 
-  token.type = UNKNOWN_TOKEN;
+  token.type = TOKEN_INVALID;
   token.value = NULL;
   lexer_advance(lexer);
 
