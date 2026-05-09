@@ -1,0 +1,117 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#include "../include/parser.h"
+
+static Token *current_token(Parser *parser) {
+  return &parser->tokens[parser->position];
+}
+
+static void advance(Parser *parser) {
+  if (parser->position < parser->token_count) {
+    parser->position++;
+  }
+}
+
+static int match(Parser *parser, TokenType type) {
+  return current_token(parser)->type == type;
+}
+
+static void consume(Parser *parser, TokenType type, const char *err_msg) {
+  if (match(parser, type)) {
+    advance(parser);
+    return;
+  }
+  fprintf(stderr, "Syntax Error: %s (Got token type %d)\n", err_msg,
+          current_token(parser)->type);
+  exit(1);
+}
+
+void parser_init(Parser *parser, Token *tokens, size_t token_count) {
+  parser->tokens = tokens;
+  parser->token_count = token_count;
+  parser->position = 0;
+}
+
+static ASTNode *parse_expression(Parser *parser);
+static ASTNode *parse_factor(Parser *parser);
+static ASTNode *parse_primary(Parser *parser);
+static ASTNode *parse_statement(Parser *parser);
+static ASTNode *parse_block(Parser *parser);
+static ASTNode *parse_function_decl(Parser *parser);
+
+static ASTNode *parse_primary(Parser *parser) {
+  Token *t = current_token(parser);
+
+  if (t->type == TOKEN_NUMBER) {
+    int value = atoi(t->value);
+    advance(parser);
+    return ast_number(value);
+  }
+
+  fprintf(stderr, "Syntax Error: Expected number expression\n");
+  exit(1);
+}
+
+static ASTNode *parse_factor(Parser *parser) { return parse_primary(parser); }
+
+static ASTNode *parse_expression(Parser *parser) {
+  return parse_factor(parser);
+}
+
+static ASTNode *parse_return(Parser *parser) {
+  consume(parser, TOKEN_KW_RETURN, "Expected 'return'");
+
+  ASTNode *expr = parse_expression(parser);
+
+  consume(parser, TOKEN_SEMICOLON, "Expected ';' after return value");
+  return ast_return(expr);
+}
+
+static ASTNode *parse_statement(Parser *parser) {
+  if (match(parser, TOKEN_KW_RETURN)) {
+    return parse_return(parser);
+  }
+
+  fprintf(stderr,
+          "Syntax Error: Unexpected statement starting with token type %d\n",
+          current_token(parser)->type);
+  exit(1);
+}
+
+static ASTNode *parse_block(Parser *parser) {
+  consume(parser, TOKEN_LBRACE, "Expected '{' to start a block statement");
+
+  size_t capacity = 4;
+  size_t count = 0;
+  ASTNode **statements = malloc(capacity * sizeof(ASTNode *));
+
+  while (!match(parser, TOKEN_RBRACE)) {
+    if (count >= capacity) {
+      capacity *= 2;
+      statements = realloc(statements, capacity * sizeof(ASTNode *));
+    }
+    statements[count++] = parse_statement(parser);
+  }
+
+  consume(parser, TOKEN_RBRACE, "Expected '}' to close a block statement");
+  return ast_block(statements, count);
+}
+
+static ASTNode *parse_function_decl(Parser *parser) {
+  Token *type_token = current_token(parser);
+  consume(parser, TOKEN_KW_INT, "Expected function return type");
+
+  Token *name_token = current_token(parser);
+  consume(parser, TOKEN_IDENTIFIER, "Expected function name identifier");
+
+  consume(parser, TOKEN_LPAREN, "Expected '(' after function name");
+  consume(parser, TOKEN_RPAREN, "Expected ')' after '('");
+
+  ASTNode *body = parse_block(parser);
+
+  return ast_function_decl(name_token->value, type_token->value, body);
+}
+
+ASTNode *parser_parse(Parser *parser) { return parse_function_decl(parser); }
