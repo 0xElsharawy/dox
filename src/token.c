@@ -28,6 +28,6 @@ const char *token_type_to_string(TokenType type) {
     return "TOKEN_EOF";
 
   default:
-    return "UNKNOWN_TOKEN";
+    return "TOKEN_INVALID";
   }
 }
