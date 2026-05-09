@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "../include/code_gen.h"
 #include "../include/lexer.h"
 #include "../include/parser.h"
 
@@ -48,7 +49,20 @@ int main(int argc, char *argv[]) {
 
   Parser parser;
   parser_init(&parser, tokens, token_count);
-  print_ast(parser_parse(&parser), 0);
+
+  ASTNode *ast = parser_parse(&parser);
+
+  print_ast(ast, 0);
+
+  FILE *out = fopen("out.s", "w");
+
+  if (out == NULL) {
+    perror("fopen");
+    free(source);
+    return 1;
+  }
+
+  gen_code(ast, out);
 
   free(source);
   return 0;
