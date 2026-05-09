@@ -60,6 +60,6 @@ ASTNode *ast_function_decl(const char *name, const char *return_type,
 ASTNode *ast_block(ASTNode **statements, size_t count);
 ASTNode *ast_return(ASTNode *expr);
 
-void ast_print(const ASTNode *node, int depth);
+void print_ast(const ASTNode *node, int depth);
 
 #endif

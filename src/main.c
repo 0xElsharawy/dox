@@ -48,7 +48,7 @@ int main(int argc, char *argv[]) {
 
   Parser parser;
   parser_init(&parser, tokens, token_count);
-  ast_print(parser_parse(&parser), 0);
+  print_ast(parser_parse(&parser), 0);
 
   free(source);
   return 0;

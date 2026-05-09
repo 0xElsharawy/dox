@@ -30,7 +30,7 @@ static void print_indent(int depth) {
   }
 }
 
-void ast_print(const ASTNode *node, int depth) {
+void print_ast(const ASTNode *node, int depth) {
   if (node == NULL) {
     print_indent(depth);
     printf("(NULL)\n");
