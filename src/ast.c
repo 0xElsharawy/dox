@@ -5,25 +5,6 @@
 
 #include "../include/ast.h"
 
-static const char *node_type_to_string(ASTNodeType type) {
-  switch (type) {
-  case AST_NUMBER:
-    return "Number";
-  case AST_RETURN:
-    return "Return";
-  case AST_FUNCTION_CALL:
-    return "FunctionCall";
-  case AST_FUNCTION_DECL:
-    return "FunctionDecl";
-  case AST_IDENTIFIER:
-    return "Identifier";
-  case AST_BLOCK:
-    return "Block";
-  default:
-    return "Unknown";
-  }
-}
-
 static void print_indent(int depth) {
   for (int i = 0; i < depth; i++) {
     printf("  ");
