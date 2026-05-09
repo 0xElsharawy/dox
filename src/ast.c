@@ -50,27 +50,27 @@ void print_ast(const ASTNode *node, int depth) {
 
   case AST_RETURN:
     printf("AST_RETURN\n");
-    ast_print(node->return_stmt.expr, depth + 1);
+    print_ast(node->return_stmt.expr, depth + 1);
     break;
 
   case AST_FUNCTION_CALL:
     printf("AST_FUNCTION_CALL: %s (%zu args)\n", node->function_call.name,
            node->function_call.arg_count);
     for (size_t i = 0; i < node->function_call.arg_count; i++) {
-      ast_print(node->function_call.args[i], depth + 1);
+      print_ast(node->function_call.args[i], depth + 1);
     }
     break;
 
   case AST_FUNCTION_DECL:
     printf("AST_FUNCTION_DECL: %s -> %s\n", node->function_decl.name,
            node->function_decl.return_type);
-    ast_print(node->function_decl.body, depth + 1);
+    print_ast(node->function_decl.body, depth + 1);
     break;
 
   case AST_BLOCK:
     printf("AST_BLOCK (%zu statements)\n", node->block.statement_count);
     for (size_t i = 0; i < node->block.statement_count; i++) {
-      ast_print(node->block.statements[i], depth + 1);
+      print_ast(node->block.statements[i], depth + 1);
     }
     break;
 
