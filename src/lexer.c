@@ -98,6 +98,48 @@ Token lexer_next_token(Lexer *lexer) {
     return token;
   }
 
+  if (lexer->c == '[') {
+    token.type = TOKEN_LBRACK;
+    token.value = "[";
+    lexer_advance(lexer);
+    return token;
+  }
+
+  if (lexer->c == ']') {
+    token.type = TOKEN_RBRACK;
+    token.value = "]";
+    lexer_advance(lexer);
+    return token;
+  }
+
+  if (lexer->c == '+') {
+    token.type = TOKEN_PLUS;
+    token.value = "+";
+    lexer_advance(lexer);
+    return token;
+  }
+
+  if (lexer->c == '-') {
+    token.type = TOKEN_MINUS;
+    token.value = "-";
+    lexer_advance(lexer);
+    return token;
+  }
+
+  if (lexer->c == '*') {
+    token.type = TOKEN_STAR;
+    token.value = "*";
+    lexer_advance(lexer);
+    return token;
+  }
+
+  if (lexer->c == '/') {
+    token.type = TOKEN_SLASH;
+    token.value = "/";
+    lexer_advance(lexer);
+    return token;
+  }
+
   if (lexer->c == ';') {
     token.type = TOKEN_SEMICOLON;
     token.value = ";";
