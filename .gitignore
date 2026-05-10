@@ -1,5 +1,30 @@
+build/
 bin/
 
-# Ignore the output of the build process
 out
-out.s
+
+*.o
+*.obj
+
+*.a
+*.so
+
+*.s
+
+*.dSYM/
+*.gcda
+*.gcno
+*.prof
+gmon.out
+
+*.log
+
+.vscode/
+.idea/
+
+*.swp
+*.swo
+*~
+
+.DS_Store
+Thumbs.db
