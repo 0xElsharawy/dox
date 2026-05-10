@@ -51,7 +51,14 @@ static ASTNode *parse_primary(Parser *parser) {
     return ast_number(value);
   }
 
-  fprintf(stderr, "Syntax Error: Expected number expression\n");
+  if (t->type == TOKEN_LPAREN) {
+    advance(parser);
+    ASTNode *expr = parse_expression(parser);
+    consume(parser, TOKEN_RPAREN, "Expected ')' after expression");
+    return expr;
+  }
+
+  fprintf(stderr, "Syntax Error: Expected expression\n");
   exit(1);
 }
 
