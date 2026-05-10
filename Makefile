@@ -4,7 +4,7 @@ CFLAGS = -Wall -Wextra -std=c11 -O2 -Iinclude -D_DEFAULT_SOURCE
 SRC_DIR = src
 BIN_DIR = bin
 TEST_SCRIPT = tests/run_tests.sh
-ASSEMBLY_FILE = out.s
+ASSEMBLY_FILE = assembly.s
 MACHINE_FILE = out
 
 TARGET = $(BIN_DIR)/tinycc
