@@ -12,14 +12,6 @@ int main(int argc, char *argv[]) {
     return 1;
   }
 
-  size_t len = strlen(argv[1]);
-
-  if (len < 3 || strcmp(argv[1] + len - 2, ".c") != 0) {
-    fprintf(stderr, "Error: Input file '%s' must have a '.c' extension\n",
-            argv[1]);
-    return 1;
-  }
-
   FILE *file = fopen(argv[1], "r");
   if (!file) {
     perror("fopen");
@@ -61,6 +53,9 @@ int main(int argc, char *argv[]) {
     free(source);
     return 1;
   }
+
+  fprintf(out, ".intel_syntax noprefix\n");
+  fprintf(out, ".global main\n\n");
 
   gen_code(ast, out);
 
