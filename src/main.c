@@ -55,7 +55,6 @@ int main(int argc, char *argv[]) {
   }
 
   fprintf(out, ".intel_syntax noprefix\n");
-  fprintf(out, ".global main\n\n");
 
   gen_code(ast, out);
 
