@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "../include/code_gen.h"
+#include "../include/codegen.h"
 #include "../include/lexer.h"
 #include "../include/parser.h"
 
