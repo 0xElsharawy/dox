@@ -1,18 +1,13 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "../include/code_gen.h"
+#include "../include/codegen.h"
 
 static void gen_function(ASTNode *node, FILE *out);
 static void gen_expr(ASTNode *node, FILE *out);
 static void gen_stmt(ASTNode *node, FILE *out);
 
 static void gen_function(ASTNode *node, FILE *out) {
-  if (strcmp(node->function_decl.name, "main") == 0) {
-    fprintf(out, ".intel_syntax noprefix\n");
-    fprintf(out, ".global main\n\n");
-  }
-
   fprintf(out, "%s:\n", node->function_decl.name);
   gen_stmt(node->function_decl.body, out);
 }
