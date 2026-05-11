@@ -41,6 +41,7 @@ static ASTNode *parse_primary(Parser *parser);
 static ASTNode *parse_statement(Parser *parser);
 static ASTNode *parse_block(Parser *parser);
 static ASTNode *parse_function_decl(Parser *parser);
+static ASTNode *parse_unary(Parser *parser);
 
 static ASTNode *parse_primary(Parser *parser) {
   Token *t = current_token(parser);
@@ -62,7 +63,7 @@ static ASTNode *parse_primary(Parser *parser) {
   exit(1);
 }
 
-static ASTNode *parse_factor(Parser *parser) { return parse_primary(parser); }
+static ASTNode *parse_factor(Parser *parser) { return parse_unary(parser); }
 
 static ASTNode *parse_term(Parser *parser) {
   ASTNode *left = parse_factor(parser);
@@ -117,7 +118,7 @@ static ASTNode *parse_block(Parser *parser) {
   size_t count = 0;
   ASTNode **statements = malloc(capacity * sizeof(ASTNode *));
 
-  while (!match(parser, TOKEN_RBRACE)) {
+  while (!match(parser, TOKEN_RBRACE) && !match(parser, TOKEN_EOF)) {
     if (count >= capacity) {
       capacity *= 2;
       statements = realloc(statements, capacity * sizeof(ASTNode *));
@@ -142,6 +143,17 @@ static ASTNode *parse_function_decl(Parser *parser) {
   ASTNode *body = parse_block(parser);
 
   return ast_function_decl(name_token->value, type_token->value, body);
+}
+
+static ASTNode *parse_unary(Parser *parser) {
+  if (match(parser, TOKEN_BANG) || match(parser, TOKEN_MINUS) ||
+      match(parser, TOKEN_TILDE)) {
+    Token token = *current_token(parser);
+    consume(parser, token.type, "Expected unary operator");
+    ASTNode *operand = parse_unary(parser);
+    return ast_unary_op(token, operand);
+  }
+  return parse_primary(parser);
 }
 
 ASTNode *parser_parse(Parser *parser) { return parse_function_decl(parser); }
