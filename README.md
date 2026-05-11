@@ -68,9 +68,8 @@ Input (`test.c`):
 ```c
 int main() {
     int x = 1;
-    int y = 2;
-    x = x + 1 + x - 3 + y;
-    return x + 1;
+    x = x + x;
+    return (3 + x) * x;
 }
 ```
 
@@ -86,10 +85,27 @@ main:
     sub rsp, 256
     mov rax, 1
     mov [rbp-8], rax
-    mov rax, 2
-    mov [rbp-16], rax
-    ; ... x = x + 1 + x - 3 + y ...
-    ; ... return x + 1 ...
+    mov rax, [rbp-8]
+    push rax
+    mov rax, [rbp-8]
+    mov rbx, rax
+    pop rax
+    add rax, rbx
+    mov [rbp-8], rax
+    mov rax, 3
+    push rax
+    mov rax, [rbp-8]
+    mov rbx, rax
+    pop rax
+    add rax, rbx
+    push rax
+    mov rax, [rbp-8]
+    mov rbx, rax
+    pop rax
+    imul rax, rbx
+    mov rsp, rbp
+    pop rbp
+    ret
 ```
 
 ## Building the Assembly
@@ -99,12 +115,8 @@ To assemble and link into an executable:
 ```bash
 gcc -no-pie assembly.s -o out
 ./out
-```
 
-## Running Tests
-
-```bash
-make test
+echo $? # Should print the return value of main (e.g. 10)
 ```
 
 ## Supported Syntax
@@ -128,4 +140,3 @@ make test
 - No arrays or structs
 
 This is an educational project for learning compiler construction.
-
