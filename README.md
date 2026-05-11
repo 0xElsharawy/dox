@@ -1,6 +1,6 @@
 # TinyCC - A Toy C Compiler
 
-A minimal, educational C compiler that compiles a subset of C to x86-64 Intel assembly.
+TinyCC(Tiny C Compiler) is minimal, educational C compiler that compiles a subset of C to x86-64 Intel assembly.
 
 ## Features
 
