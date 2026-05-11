@@ -1,6 +1,7 @@
 build/
 bin/
-tests/
+
+test.c
 
 out
 
