@@ -42,17 +42,24 @@ static ASTNode *parse_statement(Parser *parser);
 static ASTNode *parse_block(Parser *parser);
 static ASTNode *parse_function_decl(Parser *parser);
 static ASTNode *parse_unary(Parser *parser);
+static ASTNode *parse_variable_decl(Parser *parser);
 
 static ASTNode *parse_primary(Parser *parser) {
-  Token *t = current_token(parser);
+  Token *token = current_token(parser);
 
-  if (t->type == TOKEN_NUMBER) {
-    int value = atoi(t->value);
+  if (token->type == TOKEN_NUMBER) {
+    int value = atoi(token->value);
     advance(parser);
     return ast_number(value);
   }
 
-  if (t->type == TOKEN_LPAREN) {
+  if (token->type == TOKEN_IDENTIFIER) {
+    char *name = token->value;
+    advance(parser);
+    return ast_variable(name);
+  }
+
+  if (token->type == TOKEN_LPAREN) {
     advance(parser);
     ASTNode *expr = parse_expression(parser);
     consume(parser, TOKEN_RPAREN, "Expected ')' after expression");
@@ -101,6 +108,23 @@ static ASTNode *parse_return(Parser *parser) {
 }
 
 static ASTNode *parse_statement(Parser *parser) {
+  if (match(parser, TOKEN_KW_INT)) {
+    return parse_variable_decl(parser);
+  }
+
+  if (match(parser, TOKEN_IDENTIFIER)) {
+    Token *name = current_token(parser);
+
+    if (parser->position + 1 < parser->token_count &&
+        parser->tokens[parser->position + 1].type == TOKEN_ASSIGN) {
+      advance(parser); // identifier
+      advance(parser); // '='
+      ASTNode *expr = parse_expression(parser);
+      consume(parser, TOKEN_SEMICOLON, "Expected ';' after assignment");
+      return ast_assign(name->value, expr);
+    }
+  }
+
   if (match(parser, TOKEN_KW_RETURN)) {
     return parse_return(parser);
   }
@@ -154,6 +178,22 @@ static ASTNode *parse_unary(Parser *parser) {
     return ast_unary_op(token, operand);
   }
   return parse_primary(parser);
+}
+
+static ASTNode *parse_variable_decl(Parser *parser) {
+  consume(parser, TOKEN_KW_INT, "Expected variable type");
+
+  Token *name_token = current_token(parser);
+  consume(parser, TOKEN_IDENTIFIER, "Expected variable name identifier");
+
+  ASTNode *init_expr = NULL;
+  if (match(parser, TOKEN_ASSIGN)) {
+    advance(parser);
+    init_expr = parse_expression(parser);
+  }
+
+  consume(parser, TOKEN_SEMICOLON, "Expected ';' after variable declaration");
+  return ast_variable_decl(name_token->value, "int", init_expr);
 }
 
 ASTNode *parser_parse(Parser *parser) { return parse_function_decl(parser); }
