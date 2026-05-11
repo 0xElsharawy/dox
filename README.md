@@ -45,6 +45,11 @@ Source Code → Lexer → Tokens → Parser → AST → Code Generator → Assem
 2. **Parser** (`parser.c`): Uses recursive descent parsing to build an Abstract Syntax Tree (AST)
 3. **Code Generator** (`codegen.c`): Traverses the AST and emits x86-64 Intel syntax assembly
 
+## Prerequisites
+
+- **GCC**
+- **GNU Make**
+
 ## Building
 
 ```bash
@@ -115,8 +120,8 @@ To assemble and link into an executable:
 ```bash
 gcc -no-pie assembly.s -o out
 ./out
-
-echo $? # Should print the return value of main (e.g. 10)
+# Should print the return value of main (e.g. 10)
+echo $?
 ```
 
 ## Supported Syntax
