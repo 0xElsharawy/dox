@@ -37,12 +37,14 @@ static void gen_function(ASTNode *node, FILE *out) {
 static void gen_stmt(ASTNode *node, FILE *out) {
   switch (node->type) {
   case AST_VARIABLE_DECL: {
-    gen_expr(node->variable_decl.expr, out);
     local_offset += 8;
     locals[local_count].name = node->variable_decl.name;
     locals[local_count].offset = local_offset;
     local_count++;
-    fprintf(out, "    mov [rbp-%d], rax\n", local_offset);
+    if (node->variable_decl.expr) {
+      gen_expr(node->variable_decl.expr, out);
+      fprintf(out, "    mov [rbp-%d], rax\n", local_offset);
+    }
     break;
   }
 
