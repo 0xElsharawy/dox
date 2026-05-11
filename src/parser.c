@@ -117,8 +117,8 @@ static ASTNode *parse_statement(Parser *parser) {
 
     if (parser->position + 1 < parser->token_count &&
         parser->tokens[parser->position + 1].type == TOKEN_ASSIGN) {
-      advance(parser); // identifier
-      advance(parser); // '='
+      advance(parser);
+      advance(parser);
       ASTNode *expr = parse_expression(parser);
       consume(parser, TOKEN_SEMICOLON, "Expected ';' after assignment");
       return ast_assign(name->value, expr);
