@@ -1,10 +1,22 @@
-#include "../include/lexer.h"
 #include <ctype.h>
+#include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
+
+#include "../include/lexer.h"
 
 static void lexer_advance(Lexer *lexer) {
   lexer->i++;
   lexer->c = lexer->src[lexer->i];
+}
+
+static int is_identifier_char(char c) { return isalnum(c) || c == '_'; }
+
+static char lexer_peek(Lexer *lexer) {
+  if (lexer->src[lexer->i + 1] == '\0') {
+    return '\0';
+  }
+  return lexer->src[lexer->i + 1];
 }
 
 void lexer_init(Lexer *lexer, const char *src) {
@@ -26,7 +38,8 @@ Token lexer_next_token(Lexer *lexer) {
     return token;
   }
 
-  if (strncmp(&lexer->src[lexer->i], "int", 3) == 0) {
+  if (strncmp(&lexer->src[lexer->i], "int", 3) == 0 &&
+      !is_identifier_char(lexer->src[lexer->i + 3])) {
     token.type = TOKEN_KW_INT;
     token.value = "int";
     for (int j = 0; j < 3; ++j) {
@@ -35,7 +48,8 @@ Token lexer_next_token(Lexer *lexer) {
     return token;
   }
 
-  if (strncmp(&lexer->src[lexer->i], "return", 6) == 0) {
+  if (strncmp(&lexer->src[lexer->i], "return", 6) == 0 &&
+      !is_identifier_char(lexer->src[lexer->i + 6])) {
     token.type = TOKEN_KW_RETURN;
     token.value = "return";
     for (int j = 0; j < 6; ++j) {
@@ -49,6 +63,10 @@ Token lexer_next_token(Lexer *lexer) {
     char buffer[64];
     int idx = 0;
     while (isalnum(lexer->c) || lexer->c == '_') {
+      if (idx >= 64) {
+        fprintf(stderr, "Identifier too long\n");
+        exit(1);
+      }
       buffer[idx++] = lexer->c;
       lexer_advance(lexer);
     }
@@ -122,6 +140,52 @@ Token lexer_next_token(Lexer *lexer) {
   if (lexer->c == '/') {
     token.type = TOKEN_SLASH;
     token.value = "/";
+    lexer_advance(lexer);
+    return token;
+  }
+
+  if (lexer->c == '=' && lexer_peek(lexer) == '=') {
+    token.type = TOKEN_EQEQ;
+    token.value = "==";
+    lexer_advance(lexer);
+    lexer_advance(lexer);
+    return token;
+  }
+
+  if (lexer->c == '!' && lexer_peek(lexer) == '=') {
+    token.type = TOKEN_NEQ;
+    token.value = "!=";
+    lexer_advance(lexer);
+    lexer_advance(lexer);
+    return token;
+  }
+
+  if (lexer->c == '<' && lexer_peek(lexer) == '=') {
+    token.type = TOKEN_LTE;
+    token.value = "<=";
+    lexer_advance(lexer);
+    lexer_advance(lexer);
+    return token;
+  }
+
+  if (lexer->c == '>' && lexer_peek(lexer) == '=') {
+    token.type = TOKEN_GTE;
+    token.value = ">=";
+    lexer_advance(lexer);
+    lexer_advance(lexer);
+    return token;
+  }
+
+  if (lexer->c == '<') {
+    token.type = TOKEN_LT;
+    token.value = "<";
+    lexer_advance(lexer);
+    return token;
+  }
+
+  if (lexer->c == '>') {
+    token.type = TOKEN_GT;
+    token.value = ">";
     lexer_advance(lexer);
     return token;
   }
