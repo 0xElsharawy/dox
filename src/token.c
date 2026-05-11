@@ -37,6 +37,9 @@ const char *token_type_to_string(TokenType type) {
   case TOKEN_TILDE:
     return "TOKEN_TILDE";
 
+  case TOKEN_ASSIGN:
+    return "TOKEN_ASSIGN";
+
   case TOKEN_EOF:
     return "TOKEN_EOF";
 
