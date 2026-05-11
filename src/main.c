@@ -46,7 +46,7 @@ int main(int argc, char *argv[]) {
 
   print_ast(ast, 0);
 
-  FILE *out = fopen("out.s", "w");
+  FILE *out = fopen("assembly.s", "w");
 
   if (out == NULL) {
     perror("fopen");
