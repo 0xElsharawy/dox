@@ -40,6 +40,11 @@ void print_ast(const ASTNode *node, int depth) {
     print_ast(node->binary_op.right, depth + 1);
     break;
 
+  case AST_UNARY_OP:
+    printf("AST_UNARY_OP: %s\n", node->unary_op.op.value);
+    print_ast(node->unary_op.operand, depth + 1);
+    break;
+
   case AST_FUNCTION_CALL:
     printf("AST_FUNCTION_CALL: %s (%zu args)\n", node->function_call.name,
            node->function_call.arg_count);
@@ -112,5 +117,13 @@ ASTNode *ast_binary_op(Token op, ASTNode *left, ASTNode *right) {
   node->binary_op.op = op;
   node->binary_op.left = left;
   node->binary_op.right = right;
+  return node;
+}
+
+ASTNode *ast_unary_op(Token op, ASTNode *operand) {
+  ASTNode *node = malloc(sizeof(ASTNode));
+  node->type = AST_UNARY_OP;
+  node->unary_op.op = op;
+  node->unary_op.operand = operand;
   return node;
 }

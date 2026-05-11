@@ -10,6 +10,7 @@ typedef enum {
   AST_IDENTIFIER,
   AST_RETURN,
   AST_BINARY_OP,
+  AST_UNARY_OP,
   AST_FUNCTION_CALL,
   AST_FUNCTION_DECL,
   AST_BLOCK,
@@ -17,7 +18,6 @@ typedef enum {
 
 typedef struct ASTNode {
   ASTNodeType type;
-  const char *detail;
 
   union {
     struct {
@@ -57,6 +57,11 @@ typedef struct ASTNode {
       struct ASTNode *left;
       struct ASTNode *right;
     } binary_op;
+
+    struct {
+      Token op;
+      struct ASTNode *operand;
+    } unary_op;
   };
 } ASTNode;
 
@@ -67,6 +72,7 @@ ASTNode *ast_function_decl(const char *name, const char *return_type,
 ASTNode *ast_block(ASTNode **statements, size_t count);
 ASTNode *ast_return(ASTNode *expr);
 ASTNode *ast_binary_op(Token op, ASTNode *left, ASTNode *right);
+ASTNode *ast_unary_op(Token op, ASTNode *operand);
 
 void print_ast(const ASTNode *node, int depth);
 
