@@ -21,50 +21,69 @@ void print_ast(const ASTNode *node, int depth) {
   print_indent(depth);
 
   switch (node->type) {
-  case AST_NUMBER:
+  case AST_NUMBER: {
     printf("AST_NUMBER: %d\n", node->number.value);
     break;
+  }
 
-  case AST_IDENTIFIER:
-    printf("AST_IDENTIFIER: %s\n", node->identifier.name);
+  case AST_VARIABLE: {
+    printf("AST_VARIABLE: %s\n", node->variable.name);
     break;
+  }
+  case AST_VARIABLE_DECL: {
+    printf("AST_VARIABLE_DECL: %s -> %s\n", node->variable_decl.name,
+           node->variable_decl.type);
+    print_ast(node->variable_decl.expr, depth + 1);
+    break;
+  }
+  case AST_ASSIGN: {
+    printf("AST_ASSIGN: %s\n", node->assign.name);
+    print_ast(node->assign.expr, depth + 1);
+    break;
+  }
 
-  case AST_RETURN:
+  case AST_RETURN: {
     printf("AST_RETURN\n");
     print_ast(node->return_stmt.expr, depth + 1);
     break;
+  }
 
-  case AST_BINARY_OP:
+  case AST_BINARY_OP: {
     printf("AST_BINARY_OP: %s\n", node->binary_op.op.value);
     print_ast(node->binary_op.left, depth + 1);
     print_ast(node->binary_op.right, depth + 1);
     break;
+  }
 
-  case AST_UNARY_OP:
+  case AST_UNARY_OP: {
     printf("AST_UNARY_OP: %s\n", node->unary_op.op.value);
     print_ast(node->unary_op.operand, depth + 1);
     break;
+  }
 
-  case AST_FUNCTION_CALL:
+  case AST_FUNCTION_CALL: {
     printf("AST_FUNCTION_CALL: %s (%zu args)\n", node->function_call.name,
            node->function_call.arg_count);
     for (size_t i = 0; i < node->function_call.arg_count; i++) {
       print_ast(node->function_call.args[i], depth + 1);
     }
     break;
+  }
 
-  case AST_FUNCTION_DECL:
+  case AST_FUNCTION_DECL: {
     printf("AST_FUNCTION_DECL: %s -> %s\n", node->function_decl.name,
            node->function_decl.return_type);
     print_ast(node->function_decl.body, depth + 1);
     break;
+  }
 
-  case AST_BLOCK:
+  case AST_BLOCK: {
     printf("AST_BLOCK (%zu statements)\n", node->block.statement_count);
     for (size_t i = 0; i < node->block.statement_count; i++) {
       print_ast(node->block.statements[i], depth + 1);
     }
     break;
+  }
 
   default:
     printf("UNKNOWN_NODE_TYPE\n");
@@ -76,13 +95,6 @@ ASTNode *ast_number(int value) {
   ASTNode *node = malloc(sizeof(ASTNode));
   node->type = AST_NUMBER;
   node->number.value = value;
-  return node;
-}
-
-ASTNode *ast_identifier(const char *name) {
-  ASTNode *node = malloc(sizeof(ASTNode));
-  node->type = AST_IDENTIFIER;
-  node->identifier.name = strdup(name);
   return node;
 }
 
@@ -125,5 +137,29 @@ ASTNode *ast_unary_op(Token op, ASTNode *operand) {
   node->type = AST_UNARY_OP;
   node->unary_op.op = op;
   node->unary_op.operand = operand;
+  return node;
+}
+
+ASTNode *ast_variable_decl(const char *name, const char *type, ASTNode *expr) {
+  ASTNode *node = malloc(sizeof(ASTNode));
+  node->type = AST_VARIABLE_DECL;
+  node->variable_decl.name = strdup(name);
+  node->variable_decl.type = strdup(type);
+  node->variable_decl.expr = expr;
+  return node;
+}
+
+ASTNode *ast_variable(const char *name) {
+  ASTNode *node = malloc(sizeof(ASTNode));
+  node->type = AST_VARIABLE;
+  node->variable.name = strdup(name);
+  return node;
+}
+
+ASTNode *ast_assign(const char *name, ASTNode *expr) {
+  ASTNode *node = malloc(sizeof(ASTNode));
+  node->type = AST_ASSIGN;
+  node->assign.name = strdup(name);
+  node->assign.expr = expr;
   return node;
 }
