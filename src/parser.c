@@ -35,6 +35,8 @@ void parser_init(Parser *parser, Token *tokens, size_t token_count) {
 }
 
 static ASTNode *parse_expression(Parser *parser);
+static ASTNode *parse_additive(Parser *parser);
+static ASTNode *parse_comparison(Parser *parser);
 static ASTNode *parse_term(Parser *parser);
 static ASTNode *parse_factor(Parser *parser);
 static ASTNode *parse_primary(Parser *parser);
@@ -43,6 +45,10 @@ static ASTNode *parse_block(Parser *parser);
 static ASTNode *parse_function_decl(Parser *parser);
 static ASTNode *parse_unary(Parser *parser);
 static ASTNode *parse_variable_decl(Parser *parser);
+
+static ASTNode *parse_expression(Parser *parser) {
+  return parse_comparison(parser);
+}
 
 static ASTNode *parse_primary(Parser *parser) {
   Token *token = current_token(parser);
@@ -85,13 +91,30 @@ static ASTNode *parse_term(Parser *parser) {
   return left;
 }
 
-static ASTNode *parse_expression(Parser *parser) {
+static ASTNode *parse_additive(Parser *parser) {
   ASTNode *left = parse_term(parser);
 
   while (match(parser, TOKEN_PLUS) || match(parser, TOKEN_MINUS)) {
     Token token = *current_token(parser);
     consume(parser, token.type, "Expected '+' or '-' operator");
     ASTNode *right = parse_term(parser);
+    left = ast_binary_op(token, left, right);
+  }
+
+  return left;
+}
+
+static ASTNode *parse_comparison(Parser *parser) {
+  ASTNode *left = parse_additive(parser);
+
+  while (match(parser, TOKEN_EQEQ) || match(parser, TOKEN_NEQ) ||
+         match(parser, TOKEN_LT) || match(parser, TOKEN_GT) ||
+         match(parser, TOKEN_LTE) || match(parser, TOKEN_GTE)) {
+    Token token = *current_token(parser);
+    advance(parser);
+
+    ASTNode *right = parse_additive(parser);
+
     left = ast_binary_op(token, left, right);
   }
 
