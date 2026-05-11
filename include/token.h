@@ -26,6 +26,8 @@ typedef enum {
   TOKEN_BANG,
   TOKEN_TILDE,
 
+  TOKEN_ASSIGN,
+
   TOKEN_EOF,
   TOKEN_INVALID,
 } TokenType;
