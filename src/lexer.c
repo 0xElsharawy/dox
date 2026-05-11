@@ -140,6 +140,20 @@ Token lexer_next_token(Lexer *lexer) {
     return token;
   }
 
+  if (lexer->c == '!') {
+    token.type = TOKEN_BANG;
+    token.value = "!";
+    lexer_advance(lexer);
+    return token;
+  }
+
+  if (lexer->c == '~') {
+    token.type = TOKEN_TILDE;
+    token.value = "~";
+    lexer_advance(lexer);
+    return token;
+  }
+
   if (lexer->c == ';') {
     token.type = TOKEN_SEMICOLON;
     token.value = ";";
