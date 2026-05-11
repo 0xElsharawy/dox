@@ -34,6 +34,24 @@ static void gen_expr(ASTNode *node, FILE *out) {
   case AST_NUMBER:
     fprintf(out, "    mov rax, %d\n", node->number.value);
     break;
+  case AST_UNARY_OP:
+    gen_expr(node->unary_op.operand, out);
+    switch (*node->unary_op.op.value) {
+    case '-':
+      fprintf(out, "    neg rax\n");
+      break;
+    case '!':
+      fprintf(out, "    cmp rax, 0\n");
+      fprintf(out, "    sete al\n");
+      fprintf(out, "    movzb rax, al\n");
+      break;
+    case '~':
+      fprintf(out, "    not rax\n");
+      break;
+    default:
+      break;
+    }
+    break;
   case AST_BINARY_OP:
     gen_expr(node->binary_op.left, out);
     fprintf(out, "    push rax\n");
