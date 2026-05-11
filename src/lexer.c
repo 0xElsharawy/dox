@@ -98,20 +98,6 @@ Token lexer_next_token(Lexer *lexer) {
     return token;
   }
 
-  if (lexer->c == '[') {
-    token.type = TOKEN_LBRACK;
-    token.value = "[";
-    lexer_advance(lexer);
-    return token;
-  }
-
-  if (lexer->c == ']') {
-    token.type = TOKEN_RBRACK;
-    token.value = "]";
-    lexer_advance(lexer);
-    return token;
-  }
-
   if (lexer->c == '+') {
     token.type = TOKEN_PLUS;
     token.value = "+";
