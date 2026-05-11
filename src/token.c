@@ -9,8 +9,25 @@ const char *token_type_to_string(TokenType type) {
 
   case TOKEN_KW_INT:
     return "TOKEN_KW_INT";
+  case TOKEN_KW_IF:
+    return "TOKEN_KW_IF";
+  case TOKEN_KW_ELSE:
+    return "TOKEN_KW_ELSE";
   case TOKEN_KW_RETURN:
     return "TOKEN_KW_RETURN";
+
+  case TOKEN_EQEQ:
+    return "TOKEN_EQEQ";
+  case TOKEN_NEQ:
+    return "TOKEN_NEQ";
+  case TOKEN_LT:
+    return "TOKEN_LT";
+  case TOKEN_GT:
+    return "TOKEN_GT";
+  case TOKEN_LTE:
+    return "TOKEN_LTE";
+  case TOKEN_GTE:
+    return "TOKEN_GTE";
 
   case TOKEN_SEMICOLON:
     return "TOKEN_SEMICOLON";
