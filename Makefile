@@ -3,8 +3,8 @@ CFLAGS = -Wall -Wextra -std=c11 -O2 -Iinclude -D_DEFAULT_SOURCE
 
 SRC_DIR = src
 BIN_DIR = bin
-TEST_SCRIPT = tests/run_tests.sh
 ASSEMBLY_FILE = assembly.s
+RUNTIME_FILE = runtime.c
 MACHINE_FILE = out
 
 TARGET = $(BIN_DIR)/tinycc
@@ -23,17 +23,12 @@ $(TARGET): $(SRCS) | $(BIN_DIR)
 $(BIN_DIR):
 	@mkdir -p $@
 
-# Run tests
-test: $(TARGET)
-	@chmod +x $(TEST_SCRIPT)
-	@./$(TEST_SCRIPT)
-
 # Compile assembly code to machine code
 build:
-	@$(CC) -no-pie $(ASSEMBLY_FILE) -o $(MACHINE_FILE)
+	@$(CC) -no-pie $(ASSEMBLY_FILE) $(RUNTIME_FILE) -o $(MACHINE_FILE)
 
-# Clean only the bin directory
+# Clean and remove generated files
 clean:
 	@rm -rf $(BIN_DIR) $(ASSEMBLY_FILE) $(MACHINE_FILE)
 
-.PHONY: all clean test
+.PHONY: all clean build
