@@ -96,6 +96,24 @@ static void gen_stmt(ASTNode *node, FILE *out) {
     break;
   }
 
+  case AST_WHILE: {
+    int start_label = label_count++;
+    int end_label = label_count++;
+
+    fprintf(out, ".L%d:\n", start_label);
+
+    gen_expr(node->while_stmt.condition, out);
+    fprintf(out, "    cmp rax, 0\n");
+    fprintf(out, "    je .L%d\n", end_label);
+
+    gen_stmt(node->while_stmt.body, out);
+
+    fprintf(out, "    jmp .L%d\n", start_label);
+
+    fprintf(out, ".L%d:\n", end_label);
+    break;
+  }
+
   case AST_RETURN: {
     gen_expr(node->return_stmt.expr, out);
     fprintf(out, "    jmp .L%d\n", return_label);
