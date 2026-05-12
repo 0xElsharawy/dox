@@ -7,6 +7,8 @@ const char *token_type_to_string(TokenType type) {
   case TOKEN_NUMBER:
     return "TOKEN_NUMBER";
 
+  case TOKEN_KW_PRINT:
+    return "TOKEN_KW_PRINT";
   case TOKEN_KW_INT:
     return "TOKEN_KW_INT";
   case TOKEN_KW_IF:
