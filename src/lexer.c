@@ -62,7 +62,7 @@ Token lexer_next_token(Lexer *lexer) {
     token.type = TOKEN_IDENTIFIER;
     char buffer[64];
     int idx = 0;
-    while (isalnum(lexer->c) || lexer->c == '_') {
+    while (is_identifier_char(lexer->c)) {
       if (idx >= 64) {
         fprintf(stderr, "Identifier too long\n");
         exit(1);
