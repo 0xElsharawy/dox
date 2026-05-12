@@ -37,7 +37,7 @@ tinycc/
 
 The compiler follows a traditional three-phase pipeline:
 
-![Compiler Architecture](assets/compiler-architecture.png)
+![Compiler Architecture](assets/architecture.png)
 
 1. **Lexer** (`lexer.c`): Reads source code character-by-character and produces tokens
 2. **Parser** (`parser.c`): Uses recursive descent parsing to build an Abstract Syntax Tree (AST)
