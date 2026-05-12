@@ -13,6 +13,8 @@ const char *token_type_to_string(TokenType type) {
     return "TOKEN_KW_IF";
   case TOKEN_KW_ELSE:
     return "TOKEN_KW_ELSE";
+  case TOKEN_KW_WHILE:
+    return "TOKEN_KW_WHILE";
   case TOKEN_KW_RETURN:
     return "TOKEN_KW_RETURN";
 
