@@ -11,6 +11,7 @@
 - **Unary operators** - Negation (`-`), logical NOT (`!`), bitwise NOT (`~`)
 - **Assignment** - Variable assignment with optional initializer
 - **Return statements** - Function return values
+- **Conditionals** - `if`, `else` statements with nesting
 
 ## Project Structure
 
@@ -111,6 +112,53 @@ main:
     ret
 ```
 
+### Conditionals Example
+
+Input (`test_if.c`):
+
+```c
+int main() {
+    int x = 5;
+    if (x > 0) {
+        return 1;
+    } else {
+        return 0;
+    }
+}
+```
+
+Output (`assembly.s`):
+
+```asm
+.intel_syntax noprefix
+.global main
+
+main:
+    push rbp
+    mov rbp, rsp
+    sub rsp, 256
+    mov rax, 5
+    mov [rbp-8], rax
+    mov rax, [rbp-8]
+    mov rbx, 0
+    cmp rax, rbx
+    jle .L1
+    mov rax, 1
+    mov rsp, rbp
+    pop rbp
+    ret
+    jmp .L2
+.L1:
+    mov rax, 0
+    mov rsp, rbp
+    pop rbp
+    ret
+.L2:
+    mov rsp, rbp
+    pop rbp
+    ret
+```
+
 ## Building the Assembly
 
 To assemble and link into an executable:
@@ -124,22 +172,25 @@ echo $?
 
 ## Supported Syntax
 
-| Category   | Syntax                 |
-| ---------- | ---------------------- |
-| Variables  | `int x;`, `int x = 5;` |
-| Assignment | `x = 5 + 3;`           |
-| Arithmetic | `+`, `-`, `*`, `/`     |
-| Unary      | `-x`, `!x`, `~x`       |
-| Control    | `return <expr>;`       |
-| Blocks     | `{ ... }`              |
+| Category     | Syntax                                       |
+| ------------ | -------------------------------------------- |
+| Variables    | `int x;`, `int x = 5;`                       |
+| Assignment   | `x = 5 + 3;`                                 |
+| Arithmetic   | `+`, `-`, `*`, `/`                           |
+| Unary        | `-x`, `!x`, `~x`                             |
+| Control      | `return <expr>;`                             |
+| Conditionals | `if (expr) stmt`, `if (expr) stmt else stmt` |
+| Blocks       | `{ ... }`                                    |
 
 ## Limitations
 
 - Single function compilation only
 - Integer type only (no floats, no strings)
-- No function calls, no loops, no conditionals
+- No function calls, no loops
 - No global variables
 - No preprocessor directives
 - No arrays or structs
 
-This is an educational project for learning compiler construction.
+<p align="center">
+    <strong>If you liked this project, consider giving it a ⭐.</strong>
+</p>
