@@ -48,8 +48,10 @@ This produces the compiler at `bin/tinycc`.
 
 ## Usage
 
+I didn't specify a file extension for the source code, but you can use `.x` or `.txt` anything you like. To compile a source file:
+
 ```bash
-./bin/tinycc <source_file.c>
+./bin/tinycc <source_file.x>
 ```
 
 The compiler outputs `assembly.s` in the current directory.
@@ -64,18 +66,6 @@ make build
 ./out
 ```
 
-## Supported Syntax
-
-| Category     | Syntax                                       |
-| ------------ | -------------------------------------------- |
-| Variables    | `int x;`, `int x = 5;`                       |
-| Assignment   | `x = 5 + 3;`                                 |
-| Arithmetic   | `+`, `-`, `*`, `/`                           |
-| Unary        | `-x`, `!x`, `~x`                             |
-| Control      | `return <expr>;`                             |
-| Conditionals | `if (expr) stmt`, `if (expr) stmt else stmt` |
-| Blocks       | `{ ... }`                                    |
-
 ## Supported Features
 
 - [x] Variable declarations with optional initialization (only `int` type)
@@ -83,7 +73,7 @@ make build
 - [x] Unary operators (negation, logical NOT, bitwise NOT)
 - [x] Return statements
 - [x] Conditional statements (`if`, `else`)
-- [ ] Loops
+- [x] Loops (`while`)
 - [ ] Functions
 
 <p align="center">
