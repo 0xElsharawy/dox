@@ -65,109 +65,14 @@ This produces the compiler at `bin/tinycc`.
 
 The compiler outputs `assembly.s` in the current directory.
 
-## Example
-
-Input (`test.c`):
-
-```c
-int main() {
-    int x = 1;
-    x = x + x;
-    return (3 + x) * x;
-}
-```
-
-Output (`assembly.s`):
-
-```asm
-.intel_syntax noprefix
-.global main
-
-main:
-    push rbp
-    mov rbp, rsp
-    sub rsp, 256
-    mov rax, 1
-    mov [rbp-8], rax
-    mov rax, [rbp-8]
-    push rax
-    mov rax, [rbp-8]
-    mov rbx, rax
-    pop rax
-    add rax, rbx
-    mov [rbp-8], rax
-    mov rax, 3
-    push rax
-    mov rax, [rbp-8]
-    mov rbx, rax
-    pop rax
-    add rax, rbx
-    push rax
-    mov rax, [rbp-8]
-    mov rbx, rax
-    pop rax
-    imul rax, rbx
-    mov rsp, rbp
-    pop rbp
-    ret
-```
-
-### Conditionals Example
-
-Input (`test_if.c`):
-
-```c
-int main() {
-    int x = 5;
-    if (x > 0) {
-        return 1;
-    } else {
-        return 0;
-    }
-}
-```
-
-Output (`assembly.s`):
-
-```asm
-.intel_syntax noprefix
-.global main
-
-main:
-    push rbp
-    mov rbp, rsp
-    sub rsp, 256
-    mov rax, 5
-    mov [rbp-8], rax
-    mov rax, [rbp-8]
-    mov rbx, 0
-    cmp rax, rbx
-    jle .L1
-    mov rax, 1
-    mov rsp, rbp
-    pop rbp
-    ret
-    jmp .L2
-.L1:
-    mov rax, 0
-    mov rsp, rbp
-    pop rbp
-    ret
-.L2:
-    mov rsp, rbp
-    pop rbp
-    ret
-```
-
 ## Building the Assembly
 
 To assemble and link into an executable:
 
 ```bash
-gcc -no-pie assembly.s -o out
+make build
+# Run the compiled program
 ./out
-# Should print the return value of main (e.g. 10)
-echo $?
 ```
 
 ## Supported Syntax
