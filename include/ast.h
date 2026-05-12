@@ -7,6 +7,8 @@
 
 typedef enum {
   AST_NUMBER,
+  AST_IF,
+  AST_ELSE,
   AST_RETURN,
   AST_BINARY_OP,
   AST_UNARY_OP,
@@ -25,6 +27,17 @@ typedef struct ASTNode {
     struct {
       int value;
     } number;
+
+    struct {
+      struct ASTNode *condition;
+      struct ASTNode *then_branch;
+      struct ASTNode *else_branch;
+    } if_stmt;
+
+    struct {
+      struct ASTNode *condition;
+      struct ASTNode *then_branch;
+    } else_stmt;
 
     struct {
       struct ASTNode *expr;
@@ -79,6 +92,8 @@ typedef struct ASTNode {
 } ASTNode;
 
 ASTNode *ast_number(int value);
+ASTNode *ast_if(ASTNode *condition, ASTNode *then_branch, ASTNode *else_branch);
+ASTNode *ast_else(ASTNode *condition, ASTNode *then_branch);
 ASTNode *ast_function_decl(const char *name, const char *return_type,
                            ASTNode *body);
 ASTNode *ast_block(ASTNode **statements, size_t count);
