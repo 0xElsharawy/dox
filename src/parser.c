@@ -45,6 +45,7 @@ static ASTNode *parse_block(Parser *parser);
 static ASTNode *parse_function_decl(Parser *parser);
 static ASTNode *parse_unary(Parser *parser);
 static ASTNode *parse_variable_decl(Parser *parser);
+static ASTNode *parse_if(Parser *parser);
 
 static ASTNode *parse_expression(Parser *parser) {
   return parse_comparison(parser);
@@ -135,6 +136,10 @@ static ASTNode *parse_statement(Parser *parser) {
     return parse_variable_decl(parser);
   }
 
+  if (match(parser, TOKEN_KW_IF)) {
+    return parse_if(parser);
+  }
+
   if (match(parser, TOKEN_IDENTIFIER)) {
     Token *name = current_token(parser);
 
@@ -217,6 +222,29 @@ static ASTNode *parse_variable_decl(Parser *parser) {
 
   consume(parser, TOKEN_SEMICOLON, "Expected ';' after variable declaration");
   return ast_variable_decl(name_token->value, "int", init_expr);
+}
+
+static ASTNode *parse_if(Parser *parser) {
+  consume(parser, TOKEN_KW_IF, "Expected 'if'");
+
+  consume(parser, TOKEN_LPAREN, "Expected '(' after 'if'");
+  ASTNode *condition = parse_expression(parser);
+  consume(parser, TOKEN_RPAREN, "Expected ')' after if condition");
+
+  ASTNode *then_branch = parse_block(parser);
+
+  ASTNode *else_branch = NULL;
+  if (match(parser, TOKEN_KW_ELSE)) {
+    advance(parser);
+
+    if (match(parser, TOKEN_KW_IF)) {
+      else_branch = parse_if(parser);
+    } else {
+      else_branch = parse_block(parser);
+    }
+  }
+
+  return ast_if(condition, then_branch, else_branch);
 }
 
 ASTNode *parser_parse(Parser *parser) { return parse_function_decl(parser); }
