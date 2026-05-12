@@ -29,6 +29,7 @@ tinycc/
 │   ├── main.c        # Compiler entry point
 │   ├── parser.c      # Recursive descent parser
 │   └── token.c       # Token utilities
+├── runtime.c         # Runtime support (e.g., for `print`)
 ├── Makefile
 └── README.md
 ```
@@ -71,6 +72,7 @@ make build
 - [x] Variable declarations with optional initialization (only `int` type)
 - [x] Arithmetic expressions with operator precedence
 - [x] Unary operators (negation, logical NOT, bitwise NOT)
+- [x] Print statements for output (e.g., `print(x)`)
 - [x] Return statements
 - [x] Conditional statements (`if`, `else`)
 - [x] Loops (`while`)
