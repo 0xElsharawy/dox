@@ -67,6 +67,16 @@ Token lexer_next_token(Lexer *lexer) {
     return token;
   }
 
+  if (strncmp(&lexer->src[lexer->i], "while", 5) == 0 &&
+      !is_identifier_char(lexer->src[lexer->i + 5])) {
+    token.type = TOKEN_KW_WHILE;
+    token.value = "while";
+    for (int j = 0; j < 5; ++j) {
+      lexer_advance(lexer);
+    }
+    return token;
+  }
+
   if (strncmp(&lexer->src[lexer->i], "return", 6) == 0 &&
       !is_identifier_char(lexer->src[lexer->i + 6])) {
     token.type = TOKEN_KW_RETURN;
