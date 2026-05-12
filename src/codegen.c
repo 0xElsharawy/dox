@@ -7,6 +7,8 @@
 LocalVar locals[256];
 int local_count;
 int local_offset;
+int label_count;
+int return_label;
 
 static int find_local(const char *name) {
   for (int i = 0; i < local_count; i++) {
@@ -25,13 +27,22 @@ static void gen_stmt(ASTNode *node, FILE *out);
 static void gen_function(ASTNode *node, FILE *out) {
   local_count = 0;
   local_offset = 0;
+
+  return_label = label_count++;
+
   fprintf(out, ".global %s\n\n", node->function_decl.name);
   fprintf(out, "%s:\n", node->function_decl.name);
+
   fprintf(out, "    push rbp\n");
   fprintf(out, "    mov rbp, rsp\n");
   fprintf(out, "    sub rsp, 256\n");
 
   gen_stmt(node->function_decl.body, out);
+
+  fprintf(out, ".L%d:\n", return_label);
+  fprintf(out, "    mov rsp, rbp\n");
+  fprintf(out, "    pop rbp\n");
+  fprintf(out, "    ret\n");
 }
 
 static void gen_stmt(ASTNode *node, FILE *out) {
@@ -54,19 +65,50 @@ static void gen_stmt(ASTNode *node, FILE *out) {
     fprintf(out, "    mov [rbp-%d], rax\n", offset);
     break;
   }
-  case AST_RETURN: {
-    gen_expr(node->return_stmt.expr, out);
-    fprintf(out, "    mov rsp, rbp\n");
-    fprintf(out, "    pop rbp\n");
-    fprintf(out, "    ret\n");
+
+  case AST_IF: {
+    gen_expr(node->if_stmt.condition, out);
+    fprintf(out, "    cmp rax, 0\n");
+
+    if (node->if_stmt.else_branch) {
+      int else_label = label_count++;
+      int end_label = label_count++;
+
+      fprintf(out, "    je .L%d\n", else_label);
+
+      gen_stmt(node->if_stmt.then_branch, out);
+      fprintf(out, "    jmp .L%d\n", end_label);
+
+      fprintf(out, ".L%d:\n", else_label);
+      gen_stmt(node->if_stmt.else_branch, out);
+
+      fprintf(out, ".L%d:\n", end_label);
+    } else {
+      int end_label = label_count++;
+
+      fprintf(out, "    je .L%d\n", end_label);
+
+      gen_stmt(node->if_stmt.then_branch, out);
+
+      fprintf(out, ".L%d:\n", end_label);
+    }
+
     break;
   }
+
+  case AST_RETURN: {
+    gen_expr(node->return_stmt.expr, out);
+    fprintf(out, "    jmp .L%d\n", return_label);
+    break;
+  }
+
   case AST_BLOCK: {
     for (size_t i = 0; i < node->block.statement_count; i++) {
       gen_stmt(node->block.statements[i], out);
     }
     break;
   }
+
   default:
     break;
   }
@@ -93,7 +135,7 @@ static void gen_expr(ASTNode *node, FILE *out) {
     case '!': {
       fprintf(out, "    cmp rax, 0\n");
       fprintf(out, "    sete al\n");
-      fprintf(out, "    movzb rax, al\n");
+      fprintf(out, "    movzx rax, al\n");
       break;
     }
     case '~': {
