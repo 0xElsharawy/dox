@@ -26,6 +26,12 @@ void print_ast(const ASTNode *node, int depth) {
     break;
   }
 
+  case AST_PRINT: {
+    printf("AST_PRINT\n");
+    print_ast(node->print_stmt.expr, depth + 1);
+    break;
+  }
+
   case AST_IF: {
     printf("AST_IF\n");
     print_ast(node->if_stmt.condition, depth + 1);
@@ -119,6 +125,13 @@ ASTNode *ast_number(int value) {
   ASTNode *node = malloc(sizeof(ASTNode));
   node->type = AST_NUMBER;
   node->number.value = value;
+  return node;
+}
+
+ASTNode *ast_print(ASTNode *expr) {
+  ASTNode *node = malloc(sizeof(ASTNode));
+  node->type = AST_PRINT;
+  node->print_stmt.expr = expr;
   return node;
 }
 

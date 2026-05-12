@@ -7,6 +7,7 @@
 
 typedef enum {
   AST_NUMBER,
+  AST_PRINT,
   AST_IF,
   AST_ELSE,
   AST_WHILE,
@@ -28,6 +29,10 @@ typedef struct ASTNode {
     struct {
       int value;
     } number;
+
+    struct {
+      struct ASTNode *expr;
+    } print_stmt;
 
     struct {
       struct ASTNode *condition;
@@ -98,6 +103,7 @@ typedef struct ASTNode {
 } ASTNode;
 
 ASTNode *ast_number(int value);
+ASTNode *ast_print(ASTNode *expr);
 ASTNode *ast_if(ASTNode *condition, ASTNode *then_branch, ASTNode *else_branch);
 ASTNode *ast_else(ASTNode *condition, ASTNode *then_branch);
 ASTNode *ast_while(ASTNode *condition, ASTNode *body);
