@@ -38,6 +38,16 @@ Token lexer_next_token(Lexer *lexer) {
     return token;
   }
 
+  if (strncmp(&lexer->src[lexer->i], "print", 5) == 0 &&
+      !is_identifier_char(lexer->src[lexer->i + 5])) {
+    token.type = TOKEN_KW_PRINT;
+    token.value = "print";
+    for (int j = 0; j < 5; ++j) {
+      lexer_advance(lexer);
+    }
+    return token;
+  }
+
   if (strncmp(&lexer->src[lexer->i], "int", 3) == 0 &&
       !is_identifier_char(lexer->src[lexer->i + 3])) {
     token.type = TOKEN_KW_INT;
