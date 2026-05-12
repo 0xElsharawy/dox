@@ -48,6 +48,25 @@ Token lexer_next_token(Lexer *lexer) {
     return token;
   }
 
+  if (strncmp(&lexer->src[lexer->i], "if", 2) == 0 &&
+      !is_identifier_char(lexer->src[lexer->i + 2])) {
+    token.type = TOKEN_KW_IF;
+    token.value = "if";
+    lexer_advance(lexer);
+    lexer_advance(lexer);
+    return token;
+  }
+
+  if (strncmp(&lexer->src[lexer->i], "else", 4) == 0 &&
+      !is_identifier_char(lexer->src[lexer->i + 4])) {
+    token.type = TOKEN_KW_ELSE;
+    token.value = "else";
+    for (int j = 0; j < 4; ++j) {
+      lexer_advance(lexer);
+    }
+    return token;
+  }
+
   if (strncmp(&lexer->src[lexer->i], "return", 6) == 0 &&
       !is_identifier_char(lexer->src[lexer->i + 6])) {
     token.type = TOKEN_KW_RETURN;
