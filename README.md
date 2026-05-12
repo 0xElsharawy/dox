@@ -12,17 +12,6 @@ The compiler follows a traditional three-phase pipeline:
 2. **Parser** (`parser.c`): Uses recursive descent parsing to build an Abstract Syntax Tree (AST)
 3. **Code Generator** (`codegen.c`): Traverses the AST and emits x86-64 Intel syntax assembly
 
-## Features
-
-- **Integer type** - Only `int` is supported
-- **Function declarations** - Single function compilation
-- **Local variables** - Stored on the stack
-- **Arithmetic expressions** - Addition, subtraction, multiplication, division
-- **Unary operators** - Negation (`-`), logical NOT (`!`), bitwise NOT (`~`)
-- **Assignment** - Variable assignment with optional initializer
-- **Return statements** - Function return values
-- **Conditionals** - `if`, `else` statements with nesting
-
 ## Project Structure
 
 ```
@@ -87,13 +76,15 @@ make build
 | Conditionals | `if (expr) stmt`, `if (expr) stmt else stmt` |
 | Blocks       | `{ ... }`                                    |
 
-## Limitations
+## Supported Features
 
-- Single function compilation only
-- Integer type only (no floats, no strings)
-- No function calls, no loops
-- No global variables
-- No arrays or structs
+- [x] Variable declarations with optional initialization (only `int` type)
+- [x] Arithmetic expressions with operator precedence
+- [x] Unary operators (negation, logical NOT, bitwise NOT)
+- [x] Return statements
+- [x] Conditional statements (`if`, `else`)
+- [ ] Loops
+- [ ] Functions
 
 <p align="center">
     <strong>If you liked this project, consider giving it a ⭐.</strong>
