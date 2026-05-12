@@ -105,30 +105,75 @@ static void gen_expr(ASTNode *node, FILE *out) {
     }
     break;
   }
-  case AST_BINARY_OP:
+  case AST_BINARY_OP: {
     gen_expr(node->binary_op.left, out);
     fprintf(out, "    push rax\n");
+
     gen_expr(node->binary_op.right, out);
     fprintf(out, "    mov rbx, rax\n");
+
     fprintf(out, "    pop rax\n");
-    switch (*node->binary_op.op.value) {
-    case '+':
+
+    switch (node->binary_op.op.type) {
+    case TOKEN_PLUS:
       fprintf(out, "    add rax, rbx\n");
       break;
-    case '-':
+
+    case TOKEN_MINUS:
       fprintf(out, "    sub rax, rbx\n");
       break;
-    case '*':
+
+    case TOKEN_STAR:
       fprintf(out, "    imul rax, rbx\n");
       break;
-    case '/':
+
+    case TOKEN_SLASH:
       fprintf(out, "    cqo\n");
       fprintf(out, "    idiv rbx\n");
       break;
+
+    case TOKEN_EQEQ:
+      fprintf(out, "    cmp rax, rbx\n");
+      fprintf(out, "    sete al\n");
+      fprintf(out, "    movzx rax, al\n");
+      break;
+
+    case TOKEN_NEQ:
+      fprintf(out, "    cmp rax, rbx\n");
+      fprintf(out, "    setne al\n");
+      fprintf(out, "    movzx rax, al\n");
+      break;
+
+    case TOKEN_LT:
+      fprintf(out, "    cmp rax, rbx\n");
+      fprintf(out, "    setl al\n");
+      fprintf(out, "    movzx rax, al\n");
+      break;
+
+    case TOKEN_GT:
+      fprintf(out, "    cmp rax, rbx\n");
+      fprintf(out, "    setg al\n");
+      fprintf(out, "    movzx rax, al\n");
+      break;
+
+    case TOKEN_LTE:
+      fprintf(out, "    cmp rax, rbx\n");
+      fprintf(out, "    setle al\n");
+      fprintf(out, "    movzx rax, al\n");
+      break;
+
+    case TOKEN_GTE:
+      fprintf(out, "    cmp rax, rbx\n");
+      fprintf(out, "    setge al\n");
+      fprintf(out, "    movzx rax, al\n");
+      break;
+
     default:
       break;
     }
+
     break;
+  }
   default:
     break;
   }
