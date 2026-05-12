@@ -26,6 +26,23 @@ void print_ast(const ASTNode *node, int depth) {
     break;
   }
 
+  case AST_IF: {
+    printf("AST_IF\n");
+    print_ast(node->if_stmt.condition, depth + 1);
+    print_ast(node->if_stmt.then_branch, depth + 1);
+    if (node->if_stmt.else_branch) {
+      print_ast(node->if_stmt.else_branch, depth + 1);
+    }
+    break;
+  }
+
+  case AST_ELSE: {
+    printf("AST_ELSE\n");
+    print_ast(node->else_stmt.condition, depth + 1);
+    print_ast(node->else_stmt.then_branch, depth + 1);
+    break;
+  }
+
   case AST_VARIABLE: {
     printf("AST_VARIABLE: %s\n", node->variable.name);
     break;
@@ -95,6 +112,24 @@ ASTNode *ast_number(int value) {
   ASTNode *node = malloc(sizeof(ASTNode));
   node->type = AST_NUMBER;
   node->number.value = value;
+  return node;
+}
+
+ASTNode *ast_if(ASTNode *condition, ASTNode *then_branch,
+                ASTNode *else_branch) {
+  ASTNode *node = malloc(sizeof(ASTNode));
+  node->type = AST_IF;
+  node->if_stmt.condition = condition;
+  node->if_stmt.then_branch = then_branch;
+  node->if_stmt.else_branch = else_branch;
+  return node;
+}
+
+ASTNode *ast_else(ASTNode *condition, ASTNode *then_branch) {
+  ASTNode *node = malloc(sizeof(ASTNode));
+  node->type = AST_ELSE;
+  node->else_stmt.condition = condition;
+  node->else_stmt.then_branch = then_branch;
   return node;
 }
 
