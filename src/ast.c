@@ -43,6 +43,13 @@ void print_ast(const ASTNode *node, int depth) {
     break;
   }
 
+  case AST_WHILE: {
+    printf("AST_WHILE\n");
+    print_ast(node->while_stmt.condition, depth + 1);
+    print_ast(node->while_stmt.body, depth + 1);
+    break;
+  }
+
   case AST_VARIABLE: {
     printf("AST_VARIABLE: %s\n", node->variable.name);
     break;
@@ -130,6 +137,14 @@ ASTNode *ast_else(ASTNode *condition, ASTNode *then_branch) {
   node->type = AST_ELSE;
   node->else_stmt.condition = condition;
   node->else_stmt.then_branch = then_branch;
+  return node;
+}
+
+ASTNode *ast_while(ASTNode *condition, ASTNode *body) {
+  ASTNode *node = malloc(sizeof(ASTNode));
+  node->type = AST_WHILE;
+  node->while_stmt.condition = condition;
+  node->while_stmt.body = body;
   return node;
 }
 
