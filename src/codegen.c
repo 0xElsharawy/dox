@@ -66,6 +66,13 @@ static void gen_stmt(ASTNode *node, FILE *out) {
     break;
   }
 
+  case AST_PRINT: {
+    gen_expr(node->print_stmt.expr, out);
+    fprintf(out, "    mov rdi, rax\n");
+    fprintf(out, "    call print_int\n");
+    break;
+  }
+
   case AST_IF: {
     gen_expr(node->if_stmt.condition, out);
     fprintf(out, "    cmp rax, 0\n");
