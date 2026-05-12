@@ -2,6 +2,16 @@
 
 **TinyCC (Tiny C Compiler)** is minimal, educational C compiler that compiles a subset of C to x86-64 Intel assembly.
 
+## Architecture
+
+The compiler follows a traditional three-phase pipeline:
+
+![Compiler Architecture](assets/architecture.png)
+
+1. **Lexer** (`lexer.c`): Reads source code character-by-character and produces tokens
+2. **Parser** (`parser.c`): Uses recursive descent parsing to build an Abstract Syntax Tree (AST)
+3. **Code Generator** (`codegen.c`): Traverses the AST and emits x86-64 Intel syntax assembly
+
 ## Features
 
 - **Integer type** - Only `int` is supported
@@ -33,16 +43,6 @@ tinycc/
 ├── Makefile
 └── README.md
 ```
-
-## Architecture
-
-The compiler follows a traditional three-phase pipeline:
-
-![Compiler Architecture](assets/architecture.png)
-
-1. **Lexer** (`lexer.c`): Reads source code character-by-character and produces tokens
-2. **Parser** (`parser.c`): Uses recursive descent parsing to build an Abstract Syntax Tree (AST)
-3. **Code Generator** (`codegen.c`): Traverses the AST and emits x86-64 Intel syntax assembly
 
 ## Prerequisites
 
@@ -188,7 +188,6 @@ echo $?
 - Integer type only (no floats, no strings)
 - No function calls, no loops
 - No global variables
-- No preprocessor directives
 - No arrays or structs
 
 <p align="center">
