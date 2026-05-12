@@ -46,6 +46,7 @@ static ASTNode *parse_function_decl(Parser *parser);
 static ASTNode *parse_unary(Parser *parser);
 static ASTNode *parse_variable_decl(Parser *parser);
 static ASTNode *parse_if(Parser *parser);
+static ASTNode *parse_while(Parser *parser);
 
 static ASTNode *parse_expression(Parser *parser) {
   return parse_comparison(parser);
@@ -138,6 +139,10 @@ static ASTNode *parse_statement(Parser *parser) {
 
   if (match(parser, TOKEN_KW_IF)) {
     return parse_if(parser);
+  }
+
+  if (match(parser, TOKEN_KW_WHILE)) {
+    return parse_while(parser);
   }
 
   if (match(parser, TOKEN_IDENTIFIER)) {
@@ -245,6 +250,18 @@ static ASTNode *parse_if(Parser *parser) {
   }
 
   return ast_if(condition, then_branch, else_branch);
+}
+
+static ASTNode *parse_while(Parser *parser) {
+  consume(parser, TOKEN_KW_WHILE, "Expected 'while'");
+
+  consume(parser, TOKEN_LPAREN, "Expected '(' after 'while'");
+  ASTNode *condition = parse_expression(parser);
+  consume(parser, TOKEN_RPAREN, "Expected ')' after while condition");
+
+  ASTNode *body = parse_block(parser);
+
+  return ast_while(condition, body);
 }
 
 ASTNode *parser_parse(Parser *parser) { return parse_function_decl(parser); }
