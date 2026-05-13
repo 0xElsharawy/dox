@@ -18,6 +18,13 @@ int main(int argc, char *argv[]) {
     return 1;
   }
 
+  size_t len = strlen(argv[1]);
+  if (len < 4 || strcmp(argv[1] + len - 4, ".dox") != 0) {
+    fprintf(stderr, "Error: File must have a .dox extension\n");
+    fclose(file);
+    return 1;
+  }
+
   fseek(file, 0, SEEK_END);
   long size = ftell(file);
   rewind(file);
