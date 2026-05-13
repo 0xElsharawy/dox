@@ -15,20 +15,23 @@ The compiler follows a traditional three-phase pipeline:
 ## Project Structure
 
 ```
-├── include/          # Header files
-│   ├── ast.h         # AST node definitions
-│   ├── codegen.h     # Code generation interface
-│   ├── lexer.h       # Lexer interface
-│   ├── parser.h      # Parser interface
-│   └── token.h       # Token definitions
-├── src/              # Source files
-│   ├── ast.c         # AST node implementation
-│   ├── codegen.c     # x86-64 assembly generation
-│   ├── lexer.c       # Tokenization
-│   ├── main.c        # Compiler entry point
-│   ├── parser.c      # Recursive descent parser
-│   └── token.c       # Token utilities
-├── runtime.c         # Runtime support (e.g., for `print`)
+├── assets/                   # Static assets
+│   └── architecture.png      # Architecture image
+├── examples/                 # Example files
+├── include/                  # Header files
+│   ├── ast.h                 # AST node definitions
+│   ├── codegen.h             # Code generation interface
+│   ├── lexer.h               # Lexer interface
+│   ├── parser.h              # Parser interface
+│   └── token.h               # Token definitions
+├── src/                      # Source files
+│   ├── ast.c                 # AST node implementation
+│   ├── codegen.c             # x86-64 assembly generation
+│   ├── lexer.c               # Tokenization
+│   ├── main.c                # Compiler entry point
+│   ├── parser.c              # Recursive descent parser
+│   └── token.c               # Token utilities
+├── runtime.c                 # Runtime support (e.g., for `print`)
 ├── Makefile
 └── README.md
 ```
