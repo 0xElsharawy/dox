@@ -1,6 +1,6 @@
-# TinyCC - A Toy C Compiler
+# Dox - A Toy Compiler
 
-**TinyCC (Tiny C Compiler)** is minimal, educational C compiler that compiles a subset of C to x86-64 Intel assembly.
+**Dox** is a minimal, educational compiler that compiles a C-like language to x86-64 Intel assembly.
 
 ## Architecture
 
@@ -15,7 +15,6 @@ The compiler follows a traditional three-phase pipeline:
 ## Project Structure
 
 ```
-tinycc/
 ├── include/          # Header files
 │   ├── ast.h         # AST node definitions
 │   ├── codegen.h     # Code generation interface
@@ -49,10 +48,10 @@ This produces the compiler at `bin/tinycc`.
 
 ## Usage
 
-I didn't specify a file extension for the source code, but you can use `.x` or `.txt` anything you like. To compile a source file:
+To compile a dox source file (`.dox` extension):
 
 ```bash
-./bin/tinycc <source_file.x>
+./bin/dox <source.dox>
 ```
 
 The compiler outputs `assembly.s` in the current directory.
