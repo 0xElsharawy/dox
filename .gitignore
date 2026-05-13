@@ -1,8 +1,6 @@
 build/
 bin/
 
-test.c
-
 out
 
 *.o
