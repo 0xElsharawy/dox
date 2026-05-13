@@ -7,7 +7,7 @@ ASSEMBLY_FILE = assembly.s
 RUNTIME_FILE = runtime.c
 MACHINE_FILE = out
 
-TARGET = $(BIN_DIR)/tinycc
+TARGET = $(BIN_DIR)/dox
 
 # Find all .c files in src/
 SRCS = $(wildcard $(SRC_DIR)/*.c)
