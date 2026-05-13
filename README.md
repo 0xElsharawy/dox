@@ -44,7 +44,7 @@ The compiler follows a traditional three-phase pipeline:
 make
 ```
 
-This produces the compiler at `bin/tinycc`.
+This produces the compiler at `bin/dox`.
 
 ## Usage
 
