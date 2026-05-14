@@ -75,6 +75,6 @@ make build
 - Arithmetic expressions with operator precedence
 - Unary operators (negation, logical NOT, bitwise NOT)
 - Print statements for output (e.g., `print(x)`)
-- Return statements
 - Conditional statements (`if`, `else`)
 - Loops (only `while`)
+- Return statements (run `echo $?` after running the program to see the return value)
