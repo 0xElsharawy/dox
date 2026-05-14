@@ -71,15 +71,10 @@ make build
 
 ## Supported Features
 
-- [x] Variable declarations with optional initialization (only `int` type)
-- [x] Arithmetic expressions with operator precedence
-- [x] Unary operators (negation, logical NOT, bitwise NOT)
-- [x] Print statements for output (e.g., `print(x)`)
-- [x] Return statements
-- [x] Conditional statements (`if`, `else`)
-- [x] Loops (`while`)
-- [ ] Functions
-
-<p align="center">
-    <strong>If you liked this project, consider giving it a ⭐.</strong>
-</p>
+- Variable declarations with optional initialization (only `int` type)
+- Arithmetic expressions with operator precedence
+- Unary operators (negation, logical NOT, bitwise NOT)
+- Print statements for output (e.g., `print(x)`)
+- Return statements
+- Conditional statements (`if`, `else`)
+- Loops (only `while`)
