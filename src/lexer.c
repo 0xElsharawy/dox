@@ -155,6 +155,54 @@ Token lexer_next_token(Lexer *lexer) {
     return token;
   }
 
+  if (lexer->c == '+' && lexer_peek(lexer) == '=') {
+    token.type = TOKEN_PLUSEQ;
+    token.value = "+=";
+    lexer_advance(lexer);
+    lexer_advance(lexer);
+    return token;
+  }
+
+  if (lexer->c == '-' && lexer_peek(lexer) == '=') {
+    token.type = TOKEN_MINUSEQ;
+    token.value = "-=";
+    lexer_advance(lexer);
+    lexer_advance(lexer);
+    return token;
+  }
+
+  if (lexer->c == '*' && lexer_peek(lexer) == '=') {
+    token.type = TOKEN_STAREQ;
+    token.value = "*=";
+    lexer_advance(lexer);
+    lexer_advance(lexer);
+    return token;
+  }
+
+  if (lexer->c == '/' && lexer_peek(lexer) == '=') {
+    token.type = TOKEN_SLASHEQ;
+    token.value = "/=";
+    lexer_advance(lexer);
+    lexer_advance(lexer);
+    return token;
+  }
+
+  if (lexer->c == '+' && lexer_peek(lexer) == '+') {
+    token.type = TOKEN_PLUSPLUS;
+    token.value = "++";
+    lexer_advance(lexer);
+    lexer_advance(lexer);
+    return token;
+  }
+
+  if (lexer->c == '-' && lexer_peek(lexer) == '-') {
+    token.type = TOKEN_MINUSMINUS;
+    token.value = "--";
+    lexer_advance(lexer);
+    lexer_advance(lexer);
+    return token;
+  }
+
   if (lexer->c == '+') {
     token.type = TOKEN_PLUS;
     token.value = "+";
