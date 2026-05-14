@@ -67,11 +67,6 @@ const char *token_type_to_string(TokenType type) {
   case TOKEN_SLASHEQ:
     return "TOKEN_SLASHEQ";
 
-  case TOKEN_PLUSPLUS:
-    return "TOKEN_PLUSPLUS";
-  case TOKEN_MINUSMINUS:
-    return "TOKEN_MINUSMINUS";
-
   case TOKEN_ASSIGN:
     return "TOKEN_ASSIGN";
 
