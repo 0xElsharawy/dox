@@ -153,13 +153,55 @@ static ASTNode *parse_statement(Parser *parser) {
   if (match(parser, TOKEN_IDENTIFIER)) {
     Token *name = current_token(parser);
 
-    if (parser->position + 1 < parser->token_count &&
-        parser->tokens[parser->position + 1].type == TOKEN_ASSIGN) {
-      advance(parser);
-      advance(parser);
-      ASTNode *expr = parse_expression(parser);
-      consume(parser, TOKEN_SEMICOLON, "Expected ';' after assignment");
-      return ast_assign(name->value, expr);
+    if (parser->position + 1 < parser->token_count) {
+
+      TokenType op = parser->tokens[parser->position + 1].type;
+      if (op == TOKEN_ASSIGN || op == TOKEN_PLUSEQ || op == TOKEN_MINUSEQ ||
+          op == TOKEN_STAREQ || op == TOKEN_SLASHEQ) {
+        advance(parser);
+        advance(parser);
+        ASTNode *expr = parse_expression(parser);
+        consume(parser, TOKEN_SEMICOLON, "Expected ';' after assignment");
+
+        switch (op) {
+
+        case TOKEN_ASSIGN:
+          return ast_assign(name->value, expr);
+          break;
+
+        case TOKEN_PLUSEQ:
+          return ast_assign(
+              name->value,
+              ast_binary_op((Token){.type = TOKEN_PLUS, .value = "+"},
+                            ast_variable(name->value), expr));
+          break;
+
+        case TOKEN_MINUSEQ:
+          return ast_assign(
+              name->value,
+              ast_binary_op((Token){.type = TOKEN_MINUS, .value = "-"},
+                            ast_variable(name->value), expr));
+          break;
+
+        case TOKEN_STAREQ:
+          return ast_assign(
+              name->value,
+              ast_binary_op((Token){.type = TOKEN_STAR, .value = "*"},
+                            ast_variable(name->value), expr));
+          break;
+
+        case TOKEN_SLASHEQ:
+          return ast_assign(
+              name->value,
+              ast_binary_op((Token){.type = TOKEN_SLASH, .value = "/"},
+                            ast_variable(name->value), expr));
+          break;
+
+        default:
+          fprintf(stderr, "Syntax Error: Unexpected assignment operator\n");
+          exit(1);
+        }
+      }
     }
   }
 
